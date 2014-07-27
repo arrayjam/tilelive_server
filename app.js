@@ -1,4 +1,4 @@
-  var tilelive = require("tilelive"),
+var tilelive = require("tilelive"),
     server = require("express")(),
     os = require('os'),
     port = 5044;
@@ -11,14 +11,25 @@ require("tilejson").registerProtocols(tilelive);
 
 tilelive.list(mbtilesdirectory, function(err, tileinfo) {
   if (err) throw err;
-  if (Object.getOwnPropertyNames(tileinfo).length == 0) {
+
+  var tilesets = toEntries(tileinfo);
+
+  if (tilesets.length === 0) {
     console.log("No mbtiles sets found in directory '" + mbtilesdirectory + "'.");
     process.exit(1);
-  }    
+  }
+
+  console.log("Found these tilesets:");
+  tilesets.forEach(function(tileset) { console.log("  " + tileset.key + " - " + tileset.value); });
+  console.log();
+
   console.log("Serving these endpoints:");
-  for (tileset in tileinfo) {
-    tilelive.info(tileinfo[tileset], function(err, tilejson) {
+  tilesets.forEach(function(tileset) {
+    var location = tileset.value;
+
+    tilelive.info(location, function(err, tilejson) {
       console.log("  http://" + os.hostname() + ":" + port + "/" + tilejson.id + ".json");
+
       // When client requests /mymbtiles.json, use TileJSON to return it.
       server.get("/" + tilejson.id + ".json", function(req, res) {
         tilejson.scheme = "xyz";
@@ -28,35 +39,40 @@ tilelive.list(mbtilesdirectory, function(err, tileinfo) {
         res.header("Access-Control-Allow-Origin", "*");
         res.header("Access-Control-Allow-Headers", "X-Requested-With");
         res.type("application/json");
+
         if (!err) {
           res.send(tilejson);
         } else {
           res.send("TileJSON error: " + err + "\n");
         }
+
       });
     });
 
     // When client requests /mymbtiles/z/x/y.png, the MBTiles module serves the tile.
-    tilelive.load(tileinfo[tileset], function(err, tilestore) {
-      var tilestoreid = new RegExp(/\/([^/.]+).mbtiles/).exec(tilestore.filename)[1];
-      console.log("  http://" + os.hostname() + ":" + port + "/" + tilestoreid + "/{z}/{x}/{y}.png");
-      server.get("/" + tilestoreid + "/:z/:x/:y.png", function(req, res) {
-        tilestore.getTile(req.param("z"), req.param("x"), req.param("y"), function(err, tile, headers) {
+    tilelive.load(location, function(err, tilestore) {
+      console.log("  http://" + os.hostname() + ":" + port + "/" + tileset.key + "/{z}/{x}/{y}.png");
+      server.get("/" + tileset.key + "/:z/:x/:y.png", function(req, res) {
+        tilestore.getTile(req.param("z"), req.param("x"), req.param("y"), function(err, tile) {
+
           if (!err) {
             res.send(tile);
           } else {
             res.send("Tile rendering error: " + err + "\n");
           }
+
         });
       });
 
       // When client requests /mymbtiles/z/xz/y.grid.json, MBTiles serves the UTFGrid (json).
-      console.log("  http://" + os.hostname() + ":" + port + "/" + tilestoreid + "/{z}/{x}/{y}.grid.json");
-      server.get("/" + tilestore.id + "/:z/:x/:y.grid.json", function(req, res) {
+      console.log("  http://" + os.hostname() + ":" + port + "/" + tileset.key + "/{z}/{x}/{y}.grid.json");
+      server.get("/" + tileset.key + "/:z/:x/:y.grid.json", function(req, res, header) {
         res.header("Access-Control-Allow-Origin", "*");
         res.header("Access-Control-Allow-Headers", "X-Requested-With");
+
         res.type("application/json");
-        tilestore.getGrid(req.param("z"), req.param("x"), req.param("y"), function(err, tile, headers) {
+
+        tilestore.getGrid(req.param("z"), req.param("x"), req.param("y"), function(err, tile) {
           if (!err) {
             res.send(tile);
           } else {
@@ -65,7 +81,13 @@ tilelive.list(mbtilesdirectory, function(err, tileinfo) {
         });
       });
     });
-  }
+  });
 });
 
 server.listen(port);
+
+function toEntries (map) {
+  var entries = [];
+  for (var key in map) entries.push({key: key, value: map[key]});
+  return entries;
+}
