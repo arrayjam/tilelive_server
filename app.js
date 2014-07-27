@@ -15,10 +15,8 @@ tilelive.list(mbtilesdirectory, function(err, tileinfo) {
     console.log("No mbtiles sets found in directory '" + mbtilesdirectory + "'.");
     process.exit(1);
   }    
-  //console.log(tileinfo);
   console.log("Serving these endpoints:");
   for (tileset in tileinfo) {
-    //console.log(tileinfo[tileset]);
     tilelive.info(tileinfo[tileset], function(err, tilejson) {
       console.log("  http://" + os.hostname() + ":" + port + "/" + tilejson.id + ".json");
       // When client requests /mymbtiles.json, use TileJSON to return it.
@@ -41,8 +39,6 @@ tilelive.list(mbtilesdirectory, function(err, tileinfo) {
     // When client requests /mymbtiles/z/x/y.png, the MBTiles module serves the tile.
     tilelive.load(tileinfo[tileset], function(err, tilestore) {
       var tilestoreid = new RegExp(/\/([^/.]+).mbtiles/).exec(tilestore.filename)[1];
-      //console.log(tilestoreidid);
-      //console.log(JSON.stringify(tilestore));
       console.log("  http://" + os.hostname() + ":" + port + "/" + tilestoreid + "/{z}/{x}/{y}.png");
       server.get("/" + tilestoreid + "/:z/:x/:y.png", function(req, res) {
         tilestore.getTile(req.param("z"), req.param("x"), req.param("y"), function(err, tile, headers) {
