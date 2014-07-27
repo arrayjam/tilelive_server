@@ -9,7 +9,7 @@ This is a very simple mbtiles server that replicates some functionality provided
 ## Installation
 
 ```
-git clone http://..../tilelive_server.git
+git clone https://github.com/arrayjam/tilelive_server.git
 cd tilelive_server
 npm install
 ```
