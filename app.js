@@ -1,7 +1,8 @@
 var tilelive = require("tilelive"),
     server = require("express")(),
     os = require('os'),
-    port = 5044;
+    port = 5044,
+    url_prefix="tilelive/"; // Inserted at start of URL scheme, makes it easier to share to a port with other services. Blank or with trailing slash.
 
 var mbtilesdirectory = "/usr/share/mapbox/export"; // relative or absolute directory containing .mbtiles files
 
@@ -28,13 +29,14 @@ tilelive.list(mbtilesdirectory, function(err, tileinfo) {
     var location = tileset.value;
 
     tilelive.info(location, function(err, tilejson) {
-      console.log("  http://" + os.hostname() + ":" + port + "/" + tilejson.id + ".json");
+      console.log("  http://" + os.hostname() + ":" + port + "/" + url_prefix + tilejson.id + ".json");
 
       // When client requests /mymbtiles.json, use TileJSON to return it.
-      server.get("/" + tilejson.id + ".json", function(req, res) {
+      server.get("/" + url_prefix + tilejson.id + ".json", function(req, res) {
+        console.log("  " + tilejson.id);
         tilejson.scheme = "xyz";
-        tilejson.tiles = [ req.protocol + "://" + req.headers.host + "/" + tilejson.id + "/{z}/{x}/{y}.png" ];
-        tilejson.grids = [ req.protocol + "://" + req.headers.host + "/" + tilejson.id + "/{z}/{x}/{y}.grid.json" ];
+        tilejson.tiles = [ req.protocol + "://" + req.headers.host + "/" + url_prefix + tilejson.id + "/{z}/{x}/{y}.png" ];
+        tilejson.grids = [ req.protocol + "://" + req.headers.host + "/" + url_prefix + tilejson.id + "/{z}/{x}/{y}.grid.json" ];
 
         res.header("Access-Control-Allow-Origin", "*");
         res.header("Access-Control-Allow-Headers", "X-Requested-With");
@@ -51,8 +53,8 @@ tilelive.list(mbtilesdirectory, function(err, tileinfo) {
 
     // When client requests /mymbtiles/z/x/y.png, the MBTiles module serves the tile.
     tilelive.load(location, function(err, tilestore) {
-      console.log("  http://" + os.hostname() + ":" + port + "/" + tileset.key + "/{z}/{x}/{y}.png");
-      server.get("/" + tileset.key + "/:z/:x/:y.png", function(req, res) {
+      console.log("  http://" + os.hostname() + ":" + port + "/" + url_prefix + tileset.key + "/{z}/{x}/{y}.png");
+      server.get("/" + url_prefix + tileset.key + "/:z/:x/:y.png", function(req, res) {
         tilestore.getTile(req.param("z"), req.param("x"), req.param("y"), function(err, tile) {
 
           if (!err) {
@@ -65,8 +67,8 @@ tilelive.list(mbtilesdirectory, function(err, tileinfo) {
       });
 
       // When client requests /mymbtiles/z/xz/y.grid.json, MBTiles serves the UTFGrid (json).
-      console.log("  http://" + os.hostname() + ":" + port + "/" + tileset.key + "/{z}/{x}/{y}.grid.json");
-      server.get("/" + tileset.key + "/:z/:x/:y.grid.json", function(req, res) {
+      console.log("  http://" + os.hostname() + ":" + port + "/" + url_prefix + tileset.key + "/{z}/{x}/{y}.grid.json");
+      server.get("/" + url_prefix + tileset.key + "/:z/:x/:y.grid.json", function(req, res) {
         res.header("Access-Control-Allow-Origin", "*");
         res.header("Access-Control-Allow-Headers", "X-Requested-With");
 
