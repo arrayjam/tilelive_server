@@ -20,6 +20,7 @@ Edit app.js and set:
 
 - port
 - mbtilesdirectory
+- applicationPrefix
 
 ## Run
 
