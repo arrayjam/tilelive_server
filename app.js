@@ -57,7 +57,8 @@ tilelive.list(mbtilesdirectory, function(err, tileinfo) {
       server.get("/" + url_prefix + tileset.key + "/:z/:x/:y.png", function(req, res) {
         tilestore.getTile(req.param("z"), req.param("x"), req.param("y"), function(err, tile) {
 
-          if (!err) {
+          if (!err) {  
+            res.contentType('image/png');
             res.send(tile);
           } else {
             res.send("Tile rendering error: " + err + "\n");
