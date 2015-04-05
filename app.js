@@ -51,7 +51,7 @@ tilelive.list(mbtilesdirectory, function(err, tileinfo) {
         if (!err) {
           res.send(tilejson);
         } else {
-          res.send("TileJSON error: " + err + "\n");
+          res.status(404).send("TileJSON error: " + err + "\n");
         }
 
       });
@@ -67,7 +67,7 @@ tilelive.list(mbtilesdirectory, function(err, tileinfo) {
             res.contentType('image/png');
             res.send(tile);
           } else {
-            res.send("Tile rendering error: " + err + "\n");
+            res.status(404).send("Tile rendering error: " + err + "\n");
           }
 
         });
@@ -85,7 +85,7 @@ tilelive.list(mbtilesdirectory, function(err, tileinfo) {
           if (!err) {
             res.send(tile);
           } else {
-            res.send("Grid rendering error: " + err + "\n");
+            res.status(404).send("Grid rendering error: " + err + "\n");
           }
         });
       });
