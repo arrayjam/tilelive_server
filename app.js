@@ -36,6 +36,9 @@ tilelive.list(mbtilesdirectory, function(err, tileinfo) {
         applicationHost = "http://" + os.hostname() + ":" + port + "/" + applicationPrefix;
 
     tilelive.info(location, function(err, tilejson) {
+      // happens with defective exports
+      if (!tilejson)
+        return;
       console.log("  " + applicationHost + tilejson.id + ".json");
 
       // When client requests /mymbtiles.json, use TileJSON to return it.
