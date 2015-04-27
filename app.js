@@ -37,8 +37,11 @@ tilelive.list(mbtilesdirectory, function(err, tileinfo) {
 
     tilelive.info(location, function(err, tilejson) {
       // happens with defective exports
-      if (!tilejson)
-        return;
+      if (!tilejson) {
+          console.log("  Tilejson at " + location + " is defective");
+          return;
+      }
+
       console.log("  " + applicationHost + tilejson.id + ".json");
 
       // When client requests /mymbtiles.json, use TileJSON to return it.
