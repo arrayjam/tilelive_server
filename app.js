@@ -5,33 +5,84 @@ var tilelive = require("tilelive"),
     path = require("path"),
     fs = require("fs");
 
+// TODO(yuri): Implement tilecache
 require("mbtiles").registerProtocols(tilelive);
 require("tilejson").registerProtocols(tilelive);
 var Vector = require("tilelive-vector");
 Vector.registerProtocols(tilelive);
 
+Vector.mapnik.register_fonts(path.resolve(__dirname, 'fonts'));
+console.log(Vector.mapnik.fonts());
+
+// TODO(yuri): Drive this through a config
+// TODO(yuri): Use tilelive.list to generate a list of entries for initial config.
+// Is tilelive-vector's list broken? Do we need to fix/monkey patch it?
 var mbtiles = "mbtiles:///Users/arrayjam/code/tilelive_server/tiles/Geelong.mbtiles",
     tilesName = "Geelong";
 
 tilelive.info(mbtiles, function(err, tilejson) {
     tilejson.tiles = [ "http://" + os.hostname() + ":" + port + "/" + tilesName + "/{z}/{x}/{y}.png" ];
+    // TODO(yuri): UTFGrid
     tilejson.scheme = "xyz";
-    // console.log(tilejson.vector_layers);
+    // TODO(yuri): Why is minzoom/maxzoom not being filled out properly?
+    // It's determined by source, not the style
+    tilejson.maxzoom = 18;
+    console.log(tilejson);
 
-    Vector.xray({uri: mbtiles}, function(err, tilestore) {
-        server.get("/" + tilesName + "/:z/:x/:y.png", function(req, res) {
-            tilestore.getTile(req.params.z, req.params.x, req.params.y, function(err, tile, headers) {
-                console.log(arguments);
-                if (!err) {
-                    res.set(headers);
-                    res.send(tile);
-                } else {
-                    res.status(404).send("Tile rendering error: " + err + "\n");
-                }
 
+    var tm2Path = path.join(process.cwd(), "geelong_roofs_style.tm2", "project.xml");
+    // TODO(yuri): Differentiate between vector tiles and normal mbtiles
+    fs.readFile(tm2Path, 'utf8', function(err, xml) {
+        // TODO(yuri): Is it really necessary to construct our own Backend here?
+        // Can we use a different constructor for Vector?
+        new Vector.Backend({
+            uri: mbtiles,
+        }, function(err, backend) {
+            // console.log("backend", backend);
+            new Vector({
+                xml: xml,
+                backend: backend
+            }, function(err, tilestore) {
+                // console.log(tilestore._map.fonts());
+                // tilestore.getTile();
+                // TODO(yuri): Handle both normal DPI and @2x
+                server.get("/" + tilesName + "/:z/:x/:y.png", function(req, res) {
+                    tilestore.getTile(req.params.z, req.params.x, req.params.y, function(err, tile, headers) {
+                        console.log(arguments);
+                        if (!err) {
+                            res.set(headers);
+                            res.send(tile);
+                        } else {
+                            res.status(404).send("Tile rendering error: " + err + "\n");
+                        }
+
+                    });
+                });
             });
         });
     });
+
+    server.get("/" + tilesName + ".json", function(req, res) {
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "X-Requested-With");
+        return res.json(tilejson);
+    });
+
+
+    // Vector.xray({uri: mbtiles}, function(err, tilestore) {
+    //     server.get("/" + tilesName + "/:z/:x/:y.png", function(req, res) {
+    //         tilestore.getTile(req.params.z, req.params.x, req.params.y, function(err, tile, headers) {
+    //             console.log(arguments);
+    //             if (!err) {
+    //                 res.set(headers);
+    //                 res.send(tile);
+    //             } else {
+    //                 res.status(404).send("Tile rendering error: " + err + "\n");
+    //             }
+
+    //         });
+    //     });
+    // });
 
     // var tm2Path = path.join(process.cwd(), "geelong_roofs_style.tm2", "project.xml");
     // fs.readFile(tm2Path, 'utf8', function(err, xml) {
@@ -60,12 +111,6 @@ tilelive.info(mbtiles, function(err, tilejson) {
     // Vector({xml: tm2Path, source: mbtiles}, function() {
     //     console.log(arguments);
     // });
-    server.get("/" + tilesName + ".json", function(req, res) {
-        res.header("Access-Control-Allow-Origin", "*");
-        res.header("Access-Control-Allow-Headers", "X-Requested-With");
-        return res.json(tilejson);
-    });
-
     // tilelive.load(mbtiles, function(err, tilestore) {
     //     // console.log(arguments);
 
