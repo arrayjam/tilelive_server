@@ -5,7 +5,9 @@
   "main": "app.js",
   "dependencies": {
     "express": "^4.12.3",
+    "js-yaml": "^3.3.1",
     "mbtiles": "^0.8.0",
+    "rw": "^0.1.4",
     "tilejson": "^0.12.0",
     "tilelive": "^5.7.1",
     "tilelive-vector": "^3.2.5"
