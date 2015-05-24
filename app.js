@@ -3,7 +3,8 @@ var tilelive = require("tilelive"),
     os = require('os'),
     path = require("path"),
     rw = require("rw"),
-    yaml = require("js-yaml");
+    yaml = require("js-yaml"),
+    fs = require("fs");
 
 var port = 5044,
     tilesLocation = path.resolve(__dirname, "tiles"),
@@ -19,6 +20,23 @@ var Vector = require("tilelive-vector");
 Vector.registerProtocols(tilelive);
 
 Vector.mapnik.register_fonts(fontsLocation);
+
+function list(filepath, callback) {
+    filepath = path.resolve(filepath);
+    fs.readdir(filepath, function(err, files) {
+        if (err && err.code === 'ENOENT') return callback(null, {});
+        if (err) return callback(err);
+        for (var result = {}, i = 0; i < files.length; i++) {
+            var name = files[i].match(/^([\w-]+)\.mbtiles$/);
+            if (name) result[name[1]] = 'mbtiles://' + path.join(filepath, name[0]);
+        }
+        return callback(null, result);
+    });
+}
+
+Vector.tm2z.list = list;
+Vector.list = list;
+
 
 tilelive.list(tilesLocation, function(err, tileSetMap) {
     if(err) console.log(err);
@@ -62,14 +80,11 @@ tilelive.list(tilesLocation, function(err, tileSetMap) {
                         // TODO(yuri): Register alternate @2x path
                         app.get("/" + tileSet.name + "/:z/:x/:y.png", function(req, res) {
                             tilestore.getTile(req.params.z, req.params.x, req.params.y, function(err, tile, headers) {
-                                if(headers['Last-Modified'] === 'Thu, 01 Jan 1970 00:00:00 GMT') {
-                                    // console.log("wat", arguments);
-                                    console.log(tile.toString("hex"));
-                                }
                                 if (!err) {
                                     res.set(headers);
                                     return res.send(tile);
                                 } else {
+                                    console.log(err);
                                     return res.status(404).send("Tile rendering error: " + err + "\n");
                                 }
                             });
