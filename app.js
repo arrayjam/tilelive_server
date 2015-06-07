@@ -13,7 +13,7 @@ var port = 5044,
     // TODO(yuri): Multiple styles for a source?
     sourceStylesMap = {Geelong: "Geelong_Roofs.tm2"};
 
-// TODO(yuri): Implement tilecache
+// TODO(yuri): Implement tilecache?
 require("mbtiles").registerProtocols(tilelive);
 require("tilejson").registerProtocols(tilelive);
 var Vector = require("tilelive-vector");
@@ -36,7 +36,6 @@ function list(filepath, callback) {
 
 Vector.tm2z.list = list;
 Vector.list = list;
-
 
 tilelive.list(tilesLocation, function(err, tileSetMap) {
     if(err) console.log(err);
@@ -76,19 +75,11 @@ tilelive.list(tilesLocation, function(err, tileSetMap) {
                         xml: xml,
                         backend: backend
                     }, function(err, tilestore) {
+                        console.log(endpointPrefix + "/:z/:x/:y@2x.png");
                         console.log(endpointPrefix + "/:z/:x/:y.png");
-                        // TODO(yuri): Register alternate @2x path
-                        app.get("/" + tileSet.name + "/:z/:x/:y.png", function(req, res) {
-                            tilestore.getTile(req.params.z, req.params.x, req.params.y, function(err, tile, headers) {
-                                if (!err) {
-                                    res.set(headers);
-                                    return res.send(tile);
-                                } else {
-                                    console.log(err);
-                                    return res.status(404).send("Tile rendering error: " + err + "\n");
-                                }
-                            });
-                        });
+                        // NOTE(yuri): 2x should be above normal endpoint, because the regexp the route compiles to is greedy
+                        app.get("/" + tileSet.name + "/:z/:x/:y@2x.png", function(req, res) { return getTile(tilestore, req.params.z, req.params.x, req.params.y, res); });
+                        app.get("/" + tileSet.name + "/:z/:x/:y.png", function(req, res) { return getTile(tilestore, req.params.z, req.params.x, req.params.y, res); });
                     });
                 });
             } else {
@@ -98,15 +89,7 @@ tilelive.list(tilesLocation, function(err, tileSetMap) {
 
                     console.log(endpointPrefix + "/:z/:x/:y.png");
                     app.get("/" + tileSet.name + "/:z/:x/:y.png", function(req, res) {
-                        tilestore.getTile(req.params.z, req.params.x, req.params.y, function(err, tile, headers) {
-                            if (!err) {
-                                res.set(headers);
-                                res.send(tile);
-                            } else {
-                                res.status(404).send("Tile rendering error: " + err + "\n");
-                            }
-
-                        });
+                      return getTile(tilestore, req.params.z, req.params.x, req.params.y, res);
                     });
                 });
             }
@@ -135,4 +118,16 @@ function tileSetEntries(map) {
   var entries = [];
   for (var key in map) entries.push({name: key, location: map[key]});
   return entries;
+}
+
+function getTile(tilestore, z, x, y, res) {
+  tilestore.getTile(z, x, y, function(err, tile, headers) {
+    if (!err) {
+      res.set(headers);
+      return res.send(tile);
+    } else {
+      console.log(err);
+      return res.status(404).send("Tile rendering error: " + err + "\n");
+    }
+  });
 }
