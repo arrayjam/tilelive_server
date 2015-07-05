@@ -11,7 +11,7 @@ var port = 5044,
     fontsLocation = path.resolve(__dirname, "fonts"),
     stylesLocation = path.resolve(__dirname, "styles"),
     // TODO(yuri): Multiple styles for a source?
-    sourceStylesMap = {Geelong: "Geelong_Roofs.tm2"};
+    sourceStylesMap = {What: "exploring-style.tm2"};
 
 // TODO(yuri): Implement tilecache?
 require("mbtiles").registerProtocols(tilelive);

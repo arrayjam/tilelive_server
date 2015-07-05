@@ -1,0 +1,25 @@
+_prefs: 
+  mapid: ''
+  saveCenter: true
+_properties: {}
+attribution: ''
+bounds: 
+  - -180
+  - -85.0511
+  - 180
+  - 85.0511
+center: 
+  - 144.9535
+  - -37.8087
+  - 16
+description: description
+format: "png8:m=h"
+interactivity_layer: ''
+layers: null
+maxzoom: 19
+minzoom: 13
+name: Explorer
+source: "tmsource:///Users/arrayjam/Data/Explore.tm2source"
+styles: 
+  - style.mss
+template: ''

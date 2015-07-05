@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE Map[]>
+<Map srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over" background-color="#050505">
+
+<Parameters>
+  <Parameter name="attribution"><![CDATA[<a href='https://www.mapbox.com/about/maps/' target='_blank'>&copy; Mapbox &copy; OpenStreetMap</a> <a class='mapbox-improve-map' href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a>]]></Parameter>
+  <Parameter name="bounds">-180,-85.0511,180,85.0511</Parameter>
+  <Parameter name="center">144.4012,-38.1615,13</Parameter>
+  <Parameter name="format">png8:m=h</Parameter>
+  <Parameter name="maxzoom">18</Parameter>
+  <Parameter name="minzoom">12</Parameter>
+  <Parameter name="name"><![CDATA[Check out my Roofage]]></Parameter>
+  <Parameter name="source"><![CDATA[tmsource:///Users/arrayjam/Documents/mapbox-studio-geelong-roofs.tm2source]]></Parameter>
+</Parameters>
+
+
+<Style name="road" filter-mode="first">
+  <Rule>
+    <MaxScaleDenominator>12500</MaxScaleDenominator>
+    <Filter>([roadclass] = 0)</Filter>
+    <LineSymbolizer stroke-width="1" stroke-opacity="1" stroke="#2f2f2f" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>25000</MaxScaleDenominator>
+    <MinScaleDenominator>12500</MinScaleDenominator>
+    <Filter>([roadclass] = 0)</Filter>
+    <LineSymbolizer stroke-width="1" stroke-opacity="1" stroke="#2f2f2f" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>25000</MinScaleDenominator>
+    <Filter>([roadclass] = 0)</Filter>
+    <LineSymbolizer stroke-opacity="1" stroke-width="0.75" stroke="#2f2f2f" />
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <Filter>([roadclass] = 0)</Filter>
+    <LineSymbolizer stroke="#2f2f2f" stroke-opacity="0.5" stroke-width="0.2" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>2500</MaxScaleDenominator>
+    <LineSymbolizer stroke-width="6" stroke-opacity="1" stroke="#2f2f2f" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>5000</MaxScaleDenominator>
+    <MinScaleDenominator>2500</MinScaleDenominator>
+    <LineSymbolizer stroke-width="3" stroke-opacity="1" stroke="#2f2f2f" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>12500</MaxScaleDenominator>
+    <MinScaleDenominator>5000</MinScaleDenominator>
+    <LineSymbolizer stroke-width="2" stroke-opacity="1" stroke="#2f2f2f" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>25000</MaxScaleDenominator>
+    <MinScaleDenominator>12500</MinScaleDenominator>
+    <LineSymbolizer stroke-width="1" stroke-opacity="1" stroke="#2f2f2f" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000</MaxScaleDenominator>
+    <MinScaleDenominator>25000</MinScaleDenominator>
+    <LineSymbolizer stroke-opacity="1" stroke-width="0.75" stroke="#2f2f2f" />
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>100000</MinScaleDenominator>
+    <LineSymbolizer stroke="#2f2f2f" stroke-opacity="0.5" stroke-width="0.2" />
+  </Rule>
+</Style>
+<Layer name="road"
+  srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over">
+    <StyleName>road</StyleName>  </Layer>
+
+<Style name="roof" filter-mode="first">
+  <Rule>
+    <MinScaleDenominator>5000</MinScaleDenominator>
+    <Filter>([const_yr] &gt;= 2010)</Filter>
+    <PolygonSymbolizer fill="#82f557" fill-opacity="1" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>5000</MaxScaleDenominator>
+    <Filter>([const_yr] &gt;= 2010)</Filter>
+    <BuildingSymbolizer fill="#82f557" height="[ROOF_HT]" fill-opacity="0.8" />
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>5000</MinScaleDenominator>
+    <Filter>([const_yr] &gt;= 2005)</Filter>
+    <PolygonSymbolizer fill="#6df65b" fill-opacity="1" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>5000</MaxScaleDenominator>
+    <Filter>([const_yr] &gt;= 2005)</Filter>
+    <BuildingSymbolizer fill="#6df65b" height="[ROOF_HT]" fill-opacity="0.8" />
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>5000</MinScaleDenominator>
+    <Filter>([const_yr] &gt;= 2000)</Filter>
+    <PolygonSymbolizer fill="#59f663" fill-opacity="1" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>5000</MaxScaleDenominator>
+    <Filter>([const_yr] &gt;= 2000)</Filter>
+    <BuildingSymbolizer fill="#59f663" height="[ROOF_HT]" fill-opacity="0.8" />
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>5000</MinScaleDenominator>
+    <Filter>([const_yr] &gt;= 1995)</Filter>
+    <PolygonSymbolizer fill="#47f46d" fill-opacity="1" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>5000</MaxScaleDenominator>
+    <Filter>([const_yr] &gt;= 1995)</Filter>
+    <BuildingSymbolizer fill="#47f46d" height="[ROOF_HT]" fill-opacity="0.8" />
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>5000</MinScaleDenominator>
+    <Filter>([const_yr] &gt;= 1990)</Filter>
+    <PolygonSymbolizer fill="#38f179" fill-opacity="1" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>5000</MaxScaleDenominator>
+    <Filter>([const_yr] &gt;= 1990)</Filter>
+    <BuildingSymbolizer fill="#38f179" height="[ROOF_HT]" fill-opacity="0.8" />
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>5000</MinScaleDenominator>
+    <Filter>([const_yr] &gt;= 1985)</Filter>
+    <PolygonSymbolizer fill="#2bec87" fill-opacity="1" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>5000</MaxScaleDenominator>
+    <Filter>([const_yr] &gt;= 1985)</Filter>
+    <BuildingSymbolizer fill="#2bec87" height="[ROOF_HT]" fill-opacity="0.8" />
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>5000</MinScaleDenominator>
+    <Filter>([const_yr] &gt;= 1980)</Filter>
+    <PolygonSymbolizer fill="#22e596" fill-opacity="1" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>5000</MaxScaleDenominator>
+    <Filter>([const_yr] &gt;= 1980)</Filter>
+    <BuildingSymbolizer fill="#22e596" height="[ROOF_HT]" fill-opacity="0.8" />
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>5000</MinScaleDenominator>
+    <Filter>([const_yr] &gt;= 1975)</Filter>
+    <PolygonSymbolizer fill="#1cdca6" fill-opacity="1" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>5000</MaxScaleDenominator>
+    <Filter>([const_yr] &gt;= 1975)</Filter>
+    <BuildingSymbolizer fill="#1cdca6" height="[ROOF_HT]" fill-opacity="0.8" />
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>5000</MinScaleDenominator>
+    <Filter>([const_yr] &gt;= 1970)</Filter>
+    <PolygonSymbolizer fill="#19d2b4" fill-opacity="1" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>5000</MaxScaleDenominator>
+    <Filter>([const_yr] &gt;= 1970)</Filter>
+    <BuildingSymbolizer fill="#19d2b4" height="[ROOF_HT]" fill-opacity="0.8" />
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>5000</MinScaleDenominator>
+    <Filter>([const_yr] &gt;= 1965)</Filter>
+    <PolygonSymbolizer fill="#19c7c1" fill-opacity="1" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>5000</MaxScaleDenominator>
+    <Filter>([const_yr] &gt;= 1965)</Filter>
+    <BuildingSymbolizer fill="#19c7c1" height="[ROOF_HT]" fill-opacity="0.8" />
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>5000</MinScaleDenominator>
+    <Filter>([const_yr] &gt;= 1955)</Filter>
+    <PolygonSymbolizer fill="#1cbacd" fill-opacity="1" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>5000</MaxScaleDenominator>
+    <Filter>([const_yr] &gt;= 1955)</Filter>
+    <BuildingSymbolizer fill="#1cbacd" height="[ROOF_HT]" fill-opacity="0.8" />
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>5000</MinScaleDenominator>
+    <Filter>([const_yr] &gt;= 1950)</Filter>
+    <PolygonSymbolizer fill="#22add6" fill-opacity="1" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>5000</MaxScaleDenominator>
+    <Filter>([const_yr] &gt;= 1950)</Filter>
+    <BuildingSymbolizer fill="#22add6" height="[ROOF_HT]" fill-opacity="0.8" />
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>5000</MinScaleDenominator>
+    <Filter>([const_yr] &gt;= 1945)</Filter>
+    <PolygonSymbolizer fill="#299fdd" fill-opacity="1" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>5000</MaxScaleDenominator>
+    <Filter>([const_yr] &gt;= 1945)</Filter>
+    <BuildingSymbolizer fill="#299fdd" height="[ROOF_HT]" fill-opacity="0.8" />
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>5000</MinScaleDenominator>
+    <Filter>([const_yr] &gt;= 1940)</Filter>
+    <PolygonSymbolizer fill="#3291e0" fill-opacity="1" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>5000</MaxScaleDenominator>
+    <Filter>([const_yr] &gt;= 1940)</Filter>
+    <BuildingSymbolizer fill="#3291e0" height="[ROOF_HT]" fill-opacity="0.8" />
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>5000</MinScaleDenominator>
+    <Filter>([const_yr] &gt;= 1935)</Filter>
+    <PolygonSymbolizer fill="#3c83e1" fill-opacity="1" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>5000</MaxScaleDenominator>
+    <Filter>([const_yr] &gt;= 1935)</Filter>
+    <BuildingSymbolizer fill="#3c83e1" height="[ROOF_HT]" fill-opacity="0.8" />
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>5000</MinScaleDenominator>
+    <Filter>([const_yr] &gt;= 1930)</Filter>
+    <PolygonSymbolizer fill="#4676de" fill-opacity="1" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>5000</MaxScaleDenominator>
+    <Filter>([const_yr] &gt;= 1930)</Filter>
+    <BuildingSymbolizer fill="#4676de" height="[ROOF_HT]" fill-opacity="0.8" />
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>5000</MinScaleDenominator>
+    <Filter>([const_yr] &gt;= 1925)</Filter>
+    <PolygonSymbolizer fill="#5069d8" fill-opacity="1" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>5000</MaxScaleDenominator>
+    <Filter>([const_yr] &gt;= 1925)</Filter>
+    <BuildingSymbolizer fill="#5069d8" height="[ROOF_HT]" fill-opacity="0.8" />
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>5000</MinScaleDenominator>
+    <Filter>([const_yr] &gt;= 1920)</Filter>
+    <PolygonSymbolizer fill="#595dd0" fill-opacity="1" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>5000</MaxScaleDenominator>
+    <Filter>([const_yr] &gt;= 1920)</Filter>
+    <BuildingSymbolizer fill="#595dd0" height="[ROOF_HT]" fill-opacity="0.8" />
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>5000</MinScaleDenominator>
+    <Filter>([const_yr] &gt;= 1915)</Filter>
+    <PolygonSymbolizer fill="#6152c5" fill-opacity="1" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>5000</MaxScaleDenominator>
+    <Filter>([const_yr] &gt;= 1915)</Filter>
+    <BuildingSymbolizer fill="#6152c5" height="[ROOF_HT]" fill-opacity="0.8" />
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>5000</MinScaleDenominator>
+    <Filter>([const_yr] &gt;= 1910)</Filter>
+    <PolygonSymbolizer fill="#6848b8" fill-opacity="1" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>5000</MaxScaleDenominator>
+    <Filter>([const_yr] &gt;= 1910)</Filter>
+    <BuildingSymbolizer fill="#6848b8" height="[ROOF_HT]" fill-opacity="0.8" />
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>5000</MinScaleDenominator>
+    <Filter>([const_yr] &gt;= 1905)</Filter>
+    <PolygonSymbolizer fill="#6d3fa9" fill-opacity="1" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>5000</MaxScaleDenominator>
+    <Filter>([const_yr] &gt;= 1905)</Filter>
+    <BuildingSymbolizer fill="#6d3fa9" height="[ROOF_HT]" fill-opacity="0.8" />
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>5000</MinScaleDenominator>
+    <Filter>([const_yr] &gt;= 1900)</Filter>
+    <PolygonSymbolizer fill="#7f3eaf" fill-opacity="1" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>5000</MaxScaleDenominator>
+    <Filter>([const_yr] &gt;= 1900)</Filter>
+    <BuildingSymbolizer fill="#7f3eaf" height="[ROOF_HT]" fill-opacity="0.8" />
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>5000</MinScaleDenominator>
+    <Filter>([const_yr] &gt;= 1850)</Filter>
+    <PolygonSymbolizer fill="#ff6855" fill-opacity="1" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>5000</MaxScaleDenominator>
+    <Filter>([const_yr] &gt;= 1850)</Filter>
+    <BuildingSymbolizer fill="#ff6855" height="[ROOF_HT]" fill-opacity="0.8" />
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>5000</MinScaleDenominator>
+    <Filter>([const_yr] &gt;= 1800)</Filter>
+    <PolygonSymbolizer fill="#d0cb35" fill-opacity="1" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>5000</MaxScaleDenominator>
+    <Filter>([const_yr] &gt;= 1800)</Filter>
+    <BuildingSymbolizer fill="#d0cb35" height="[ROOF_HT]" fill-opacity="0.8" />
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>5000</MinScaleDenominator>
+    <PolygonSymbolizer fill="#303030" fill-opacity="1" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>5000</MaxScaleDenominator>
+    <BuildingSymbolizer height="[ROOF_HT]" fill="#303030" fill-opacity="0.8" />
+  </Rule>
+</Style>
+<Layer name="roof"
+  srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over">
+    <StyleName>roof</StyleName>  </Layer>
+
+<Style name="suburb" filter-mode="first">
+  <Rule>
+    <Filter>([SSC_NAME].match('^.{14,}$'))</Filter>
+    <TextSymbolizer size="9" face-name="Open Sans Extrabold" placement="interior" fill="#fcff49" halo-fill="#000000" halo-radius="1.5" halo-opacity="1" margin="5" ><![CDATA[[SSC_NAME]]]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <Filter>([SSC_NAME].match('^.{10,}$'))</Filter>
+    <TextSymbolizer size="12" face-name="Open Sans Extrabold" placement="interior" fill="#fcff49" halo-fill="#000000" halo-radius="1.5" halo-opacity="1" margin="5" ><![CDATA[[SSC_NAME]]]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <TextSymbolizer face-name="Open Sans Extrabold" placement="interior" fill="#fcff49" halo-fill="#000000" halo-radius="1.5" halo-opacity="1" margin="5" size="15" ><![CDATA[[SSC_NAME]]]></TextSymbolizer>
+  </Rule>
+</Style>
+<Layer name="suburb"
+  srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over">
+    <StyleName>suburb</StyleName>  </Layer>
+
+</Map>
